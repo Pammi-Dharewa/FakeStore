@@ -4,6 +4,8 @@ import com.domain.productservice1.models.Product;
 import com.domain.productservice1.services.ProductService;
 import com.domain.productservice1.services.SetDatabaseProductService;
 import dtos.CreateProductRequestDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,13 +16,16 @@ import java.util.List;
 
 public class ProductController {
 
+    @Qualifier("selfProductService")
+    @Autowired
 private ProductService productService;
 
+@Autowired
 private RestTemplate restTemplate;
 
 
 
-public ProductController(ProductService productService, RestTemplate restTemplate) {
+public ProductController(@Qualifier("selfProductService") ProductService productService, RestTemplate restTemplate) {
     this.productService = productService;
     this.restTemplate = restTemplate;
 }
@@ -48,13 +53,14 @@ public ProductController(ProductService productService, RestTemplate restTemplat
     }
 
     @GetMapping("/products")
-    public void getAllProducts() {
+    public List<Product> getAllProducts() {
         List<Product> products = productService.getAllProducts();
 
-        throw new RuntimeException();
-    }
+        if(products.isEmpty()){
+            throw new RuntimeException();
+        }
 
-    public void updateProduct() {
+        return products;
 
     }
 

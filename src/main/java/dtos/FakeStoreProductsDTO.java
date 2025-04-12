@@ -52,4 +52,5 @@ public class FakeStoreProductsDTO implements ProductService {
     public Product createProduct(String title, double price, String description, String category, String image) {
         return null;
     }
+
 }
